@@ -14,7 +14,14 @@
       "tests"
     ]
   },
+  "requireApproval": "never",  
+  "toolkitStackName": "CDKToolkitStudent03",  
   "context": {
+    "EnvironmentType": "TEST",      
+    "Creator": "Dominik Wolnicki",  
+    "Project": "AWS CDK Training",      
+    "EC2KeyName": "student03",       
+    "@aws-cdk/core:bootstrapQualifier": "student99",   
     "@aws-cdk/aws-apigateway:usagePlanKeyOrderInsensitiveId": true,
     "@aws-cdk/core:stackRelativeExports": true,
     "@aws-cdk/aws-rds:lowercaseDbIdentifier": true,
