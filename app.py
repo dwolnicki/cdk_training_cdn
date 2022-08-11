@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 from rim_stacks.vpc_stack import RimVpcStack
 from rim_stacks.elb_app_stack import RimElbAppStack
 from rim_stacks.bastion_stack import RimBastionStack
+from rim_stacks.cloudfront_stack import RimCloudFrontStack
 
 load_dotenv()
 
@@ -66,5 +67,13 @@ rimBastion = RimBastionStack(app, owner.capitalize()+"RimBastionStack",
     vpc = rimVpc.vpc,
     bastion_sec_grp = rimVpc.bastion_sec_grp
 )
+
+rimCloudFront = RimCloudFrontStack(app, owner.capitalize()+"RimCloudFrontStack",
+    env=cdk.Environment(account=os.getenv('CDK_DEFAULT_ACCOUNT'), region='us-east-1'),
+    owner=owner,
+    webapp_token = webapp_token,
+    rim_hosted_zone_name = rim_hosted_zone_name
+)
+
 
 app.synth()

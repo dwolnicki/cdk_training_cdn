@@ -8,5 +8,9 @@
   "hosted-zone:account=179787945443:domainName=rimcademy.net:region=eu-west-1": {
     "Id": "/hostedzone/Z08643751VX7VVGOYQ6WC",
     "Name": "rimcademy.net."
+  },
+  "hosted-zone:account=179787945443:domainName=rimcademy.net:region=us-east-1": {
+    "Id": "/hostedzone/Z08643751VX7VVGOYQ6WC",
+    "Name": "rimcademy.net."
   }
 }
