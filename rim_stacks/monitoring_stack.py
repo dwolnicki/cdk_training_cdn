@@ -4,7 +4,9 @@ from aws_cdk import (
     aws_ec2 as ec2,    
     aws_elasticloadbalancingv2 as elbv2,
     aws_autoscaling as autoscaling,
-    aws_cloudwatch as cloudwatch,    
+    aws_cloudwatch as cloudwatch,
+    aws_sns as sns,    
+    aws_cloudwatch_actions as cloudwatch_actions
 )
 from constructs import Construct
 
