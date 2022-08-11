@@ -112,3 +112,45 @@ class RimCloudFrontStack(Stack):
             name = owner+'-waf-acl',
             rules = [ waf_rule_rate, waf_rule_bot, waf_rule_aws_common ]
         )
+        
+        cf = cloudfront.Distribution(self, owner+'-distribution',
+            certificate = cert_cloudfront,
+            default_root_object = 'index.html',
+            domain_names = [owner.lower()+'.app.aws.'+rim_hosted_zone_name],
+            price_class = cloudfront.PriceClass.PRICE_CLASS_100,
+            geo_restriction=cloudfront.GeoRestriction.allowlist("PL", "DE", "NL", "LU"),
+            web_acl_id = waf_acl.attr_arn,
+            default_behavior=cloudfront.BehaviorOptions(
+                origin=origins.OriginGroup(
+                    primary_origin = origins.HttpOrigin(
+                        domain_name = owner.lower()+'.elb.aws.'+rim_hosted_zone_name,
+                        custom_headers={
+                            "X-Custom-Header": webapp_token
+                        },
+                    ),
+                    fallback_origin = origins.S3Origin(
+                        bucket = bucket_alt,
+                        origin_access_identity = oai
+                    ),
+                    fallback_status_codes=[500, 502, 503, 504]
+                )
+            ),
+            error_responses = [
+                cloudfront.ErrorResponse(
+                    http_status=404,
+                    response_http_status=404,
+                    response_page_path="/error404.html"
+                ),
+                cloudfront.ErrorResponse(
+                    http_status=403,
+                    response_http_status=403,
+                    response_page_path="/error403.html"
+                )                
+            ]
+        )   
+
+        cf_dns = route53.ARecord(self, owner+'-cf-dns-record',
+            zone = my_zone,
+            record_name = owner.lower()+'.app.aws.'+rim_hosted_zone_name,
+            target = route53.RecordTarget.from_alias(route53_targets.CloudFrontTarget(cf)),            
+        )           

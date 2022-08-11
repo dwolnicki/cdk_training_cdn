@@ -9,6 +9,7 @@ from rim_stacks.vpc_stack import RimVpcStack
 from rim_stacks.elb_app_stack import RimElbAppStack
 from rim_stacks.bastion_stack import RimBastionStack
 from rim_stacks.cloudfront_stack import RimCloudFrontStack
+from rim_stacks.monitoring_stack import RimMonitoringStack
 
 load_dotenv()
 
@@ -75,5 +76,12 @@ rimCloudFront = RimCloudFrontStack(app, owner.capitalize()+"RimCloudFrontStack",
     rim_hosted_zone_name = rim_hosted_zone_name
 )
 
+rimMonitoring = RimMonitoringStack(app, owner.capitalize()+"RimMonitoringStack",
+    env=cdk.Environment(account=os.getenv('CDK_DEFAULT_ACCOUNT'), region=os.getenv('CDK_DEFAULT_REGION')),
+    owner=owner,
+    alb = rimElbApp.alb,
+    asg = rimElbApp.asg,
+    email = email
+)
 
 app.synth()
